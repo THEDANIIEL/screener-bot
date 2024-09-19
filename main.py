@@ -1,37 +1,26 @@
-from selenium import webdriver
-from selenium.webdriver.chrome.service import Service
-from selenium.webdriver.common.by import By
-from selenium.webdriver.chrome.options import Options
+import requests
+from bs4 import BeautifulSoup
+from colorama import Fore
+import json
 
 
-chrome_options = Options()
-chrome_options.add_argument("--headless") 
+url = "https://api.dexscreener.com/latest/solana"
 
-chrome_driver_path = "/path/to/chromedriver"  
+tokens  = [] 
 
-service = Service(chrome_driver_path)
-driver = webdriver.Chrome(service=service, options=chrome_options)
+def get_tokens_list():
 
+    res = requests.get(url, headers={},)
 
-url = "https://www.dexscreener.com/new-tokens"
-driver.get(url)
+    if res.status_code != 200:
+        print(Fore.RED + "can't fetch the data")
 
-
-driver.implicitly_wait(10)  
+    tokens = res.json()
 
 
-tokens = driver.find_elements(By.CLASS_NAME, 'token-info')  
+    print(tokens[0])
 
-new_tokens = []
-for token in tokens:
-    token_name = token.find_element(By.TAG_NAME, 'h2').text 
-    token_address = token.find_element(By.CLASS_NAME, 'contract-link').text  
-    new_tokens.append({
-        'name': token_name,
-        'contract_address': token_address
-    })
+get_tokens_list()
 
-driver.quit()
 
-for token in new_tokens:
-    print(f"Token: {token['name']}, Contract Address: {token['contract_address']}")
+
