@@ -1,26 +1,23 @@
-import requests
-from bs4 import BeautifulSoup
-from colorama import Fore
+import requests as req
+import pprint
 import json
 
+url=""
 
-url = "https://api.dexscreener.com/latest/solana"
+def get_pairs():
 
-tokens  = [] 
-
-def get_tokens_list():
-
-    res = requests.get(url, headers={},)
-
-    if res.status_code != 200:
-        print(Fore.RED + "can't fetch the data")
-
-    tokens = res.json()
+    response = req.get(
+        "https://api.dexscreener.com/latest/dex/search?q=text",
+        headers={"chainId": "solana"},
+    )
 
 
-    print(tokens[0])
+    data = response.json()
 
-get_tokens_list()
+    data = json.loads(data)
 
+    filtered_list = [token for token in isinstance(data, dict) if token]
 
+    print(filtered_list)
 
+get_pairs()
