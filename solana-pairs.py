@@ -11,7 +11,7 @@ from portalocker import Lock, unlock
 import os
 import time  # Add this import for time.sleep
 
-wallet_address = "675kPX9MHTjS2zt1qfr1NYHuzeLXfQM9H24wFSUt1Mp8"
+wallet_address = "AhJNY36jZuAfYR16fHgByFEMJEw88QarL836Zi391ps9"
 seen_signatures = set()
 solana_client = Client("https://api.mainnet-beta.solana.com")
 
@@ -74,8 +74,9 @@ async def run():
         }))
         first_resp = await websocket.recv()
         response_dict = json.loads(first_resp)
-        if 'result' in response_dict:
-            print("Subscription successful. Subscription ID: ", response_dict['result'])
+        print(response_dict)
+        # if 'result' in response_dict:
+        #     print("Subscription successful. Subscription ID: ", response_dict['result'])
         # Continuously read from the WebSocket
         async for response in websocket:
             response_dict = json.loads(response)

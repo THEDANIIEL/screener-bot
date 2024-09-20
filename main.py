@@ -1,37 +1,23 @@
-from selenium import webdriver
-from selenium.webdriver.chrome.service import Service
-from selenium.webdriver.common.by import By
-from selenium.webdriver.chrome.options import Options
+import requests as req
+import pprint
+import json
+
+url=""
+
+def get_pairs():
+
+    response = req.get(
+        "https://api.dexscreener.com/latest/dex/search?q=text",
+        headers={"chainId": "solana"},
+    )
 
 
-chrome_options = Options()
-chrome_options.add_argument("--headless") 
+    data = response.json()
 
-chrome_driver_path = "/path/to/chromedriver"  
+    data = json.loads(data)
 
-service = Service(chrome_driver_path)
-driver = webdriver.Chrome(service=service, options=chrome_options)
+    filtered_list = [token for token in isinstance(data, dict) if token]
 
+    print(filtered_list)
 
-url = "https://www.dexscreener.com/new-tokens"
-driver.get(url)
-
-
-driver.implicitly_wait(10)  
-
-
-tokens = driver.find_elements(By.CLASS_NAME, 'token-info')  
-
-new_tokens = []
-for token in tokens:
-    token_name = token.find_element(By.TAG_NAME, 'h2').text 
-    token_address = token.find_element(By.CLASS_NAME, 'contract-link').text  
-    new_tokens.append({
-        'name': token_name,
-        'contract_address': token_address
-    })
-
-driver.quit()
-
-for token in new_tokens:
-    print(f"Token: {token['name']}, Contract Address: {token['contract_address']}")
+get_pairs()
